@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Blind Rank: Premier League</title>
+<meta name="description" content="Rank ten Premier League players blind, one at a time. No take-backs. Play the daily round and share your score.">
+<meta property="og:title" content="Blind Rank: Premier League">
+<meta property="og:description" content="Rank ten Premier League players blind. Play the daily round and share your score.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0a1810">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9A%BD%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Schibsted+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a1810; --panel:#102a1c; --panel2:#0c2016; --line:#1f4630;
+  --ink:#eaf3ec; --muted:#9bb3a2; --green:#5ed38a; --yellow:#ffd23f; --on-yellow:#10190f;
+  --good:#5ed38a; --near:#ffd23f; --bad:#ff7a7a;
+  --seg-on:#eef3ec; --seg-on-ink:#10190f;
+  --display:'Big Shoulders Display','Arial Narrow',Impact,sans-serif;
+  --body:'Schibsted Grotesk',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#f1f6f2; --panel:#ffffff; --panel2:#e4eee6; --line:#cddbd0;
+    --ink:#10261a; --muted:#52695a; --green:#157a43; --good:#157a43; --near:#9a7300; --bad:#c62f2f;
+    --seg-on:#10261a; --seg-on-ink:#f1f6f2;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#f1f6f2; --panel:#ffffff; --panel2:#e4eee6; --line:#cddbd0;
+  --ink:#10261a; --muted:#52695a; --green:#157a43; --good:#157a43; --near:#9a7300; --bad:#c62f2f;
+  --seg-on:#10261a; --seg-on-ink:#f1f6f2;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;border-top:6px solid var(--yellow)}
+button{font-family:inherit}
+button:focus-visible,a:focus-visible{outline:3px solid var(--yellow);outline-offset:3px}
+
+/* nav */
+.nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 20px;border-bottom:1px solid var(--line);min-height:60px}
+.logo{font-family:var(--display);font-weight:800;font-size:34px;line-height:1;letter-spacing:.2px;color:var(--ink);text-decoration:none}
+.links{display:flex;align-items:center;gap:22px}
+.links a{color:var(--ink);text-decoration:none;font-weight:600;font-size:15px;padding:20px 0 17px;border-bottom:3px solid transparent}
+.links a[aria-current="page"]{color:var(--green);border-bottom-color:var(--green)}
+.links .soon{color:var(--muted);cursor:default}
+.later{font-size:12px;font-weight:500;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:1px 9px;margin-left:8px}
+@media (max-width:620px){.links .opt{display:none}.links{gap:16px}.logo{font-size:30px}}
+
+/* hero */
+.hero{max-width:1180px;margin:0 auto;padding:36px 20px 64px;display:grid;gap:44px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:900px){.hero{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;padding-top:64px;gap:56px}}
+.seg{display:inline-flex;padding:5px;border:1px solid var(--line);border-radius:999px;background:var(--panel2);margin-bottom:34px}
+.seg button{border:0;background:transparent;color:var(--ink);font-weight:700;font-size:15px;padding:11px 20px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--seg-on);color:var(--seg-on-ink)}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(50px,9vw,84px);line-height:.92;letter-spacing:-.5px;margin:0 0 26px}
+h1 .g{display:block;color:var(--green)}
+.lead{font-size:20px;color:var(--muted);max-width:36ch;margin:0 0 28px}
+.cta-btn{border:0;background:var(--yellow);color:var(--on-yellow);font-weight:700;font-size:18px;padding:17px 30px;border-radius:999px;cursor:pointer}
+.ghost-btn{border:1px solid var(--line);background:transparent;color:var(--ink);font-weight:700;font-size:16px;padding:16px 24px;border-radius:999px;cursor:pointer}
+.btnrow{display:flex;flex-wrap:wrap;gap:10px}
+.fine{font-size:14px;color:var(--muted);max-width:52ch;margin:16px 0 0}
+.slotcta{margin-top:22px;border:1px dashed var(--muted);border-radius:16px;padding:14px 16px;max-width:420px}
+.slotcta b{display:block;font-family:var(--display);font-size:24px;font-weight:800;line-height:1.1}
+.slotcta p{margin:2px 0 10px;color:var(--muted);font-size:14px}
+.slotcta .ghost-btn{padding:9px 16px;font-size:14px}
+
+/* pitch */
+.pitch{position:relative;border-radius:26px;background:#1b5e3b;padding:14px;margin-bottom:48px;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.grass{--l:rgba(215,232,220,.6);position:relative;border:3px solid var(--l);border-radius:6px;overflow:hidden;
+  background:repeating-linear-gradient(180deg,#1b5e3b 0 76px,#1f6a43 76px 152px);
+  padding:28px 6px 96px;display:grid;gap:18px}
+.grass::before{content:"";position:absolute;top:-3px;left:50%;width:130px;height:65px;transform:translateX(-50%);border:3px solid var(--l);border-top:0;border-radius:0 0 130px 130px}
+.grass::after{content:"";position:absolute;bottom:-3px;left:50%;width:54%;height:104px;transform:translateX(-50%);border:3px solid var(--l);border-bottom:0}
+.row{position:relative;z-index:1;display:flex;justify-content:space-around;gap:4px}
+.shirt{display:flex;flex-direction:column;align-items:center;width:74px;padding:0;border:0;background:none;color:#fff;cursor:default}
+.shirt:not(:disabled){cursor:pointer}
+.shirt:not(:disabled):hover svg{transform:translateY(-3px)}
+.shirt svg{display:block;transition:transform .15s}
+.lab{margin-top:3px;font-size:11.5px;font-weight:700;line-height:1.15;min-height:30px;max-width:74px;text-align:center;text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.lab em{display:block;font-style:normal;font-weight:600;font-size:11px}
+.lab .good{color:#8ff0b3}.lab .near{color:#ffe27a}.lab .bad{color:#ffaaaa}
+.flip{animation:flip .5s both}
+@keyframes flip{from{transform:rotateY(90deg) scale(.8);opacity:0}to{transform:none;opacity:1}}
+.tick{position:absolute;left:18px;bottom:-34px;width:min(300px,calc(100% - 36px));background:var(--panel);border:1.5px solid rgba(215,232,220,.75);border-radius:18px;padding:12px 14px 14px;box-shadow:0 12px 30px rgba(0,0,0,.35);color:var(--ink)}
+.tick .d{font-weight:700;font-size:14px}
+.win{margin-top:8px;height:58px;border-radius:12px;background:linear-gradient(#0c2418,#133a25);display:flex;align-items:center;gap:10px;padding:0 12px;overflow:hidden;color:#eaf3ec}
+.win .dot{width:26px;height:26px;border-radius:50%;flex:none;border:2px solid rgba(255,255,255,.8)}
+.win .nm{font-family:var(--display);font-weight:800;font-size:34px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rise{animation:rise .35s both}
+@keyframes rise{from{transform:translateY(100%);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.rise,.flip{animation:none}}
+
+/* lower sections */
+.sec{max-width:1180px;margin:0 auto;padding:44px 20px;border-top:1px solid var(--line);display:grid;gap:22px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:800px){.sec{grid-template-columns:320px minmax(0,1fr);gap:40px}}
+.sec h2{font-size:24px;font-weight:700;margin:0 0 8px;letter-spacing:-.2px}
+.sec p{margin:0;color:var(--muted);max-width:52ch}
+.cards{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:18px}
+.card .top{display:flex;align-items:center;gap:10px}
+.card .t{font-family:var(--display);font-weight:800;font-size:30px;line-height:1}
+.pill{font-size:12px;font-weight:600;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.card .s{color:var(--muted);font-size:14px;margin:8px 0 6px}
+.card .big{font-family:var(--display);font-weight:800;font-size:60px;line-height:1;display:flex;align-items:baseline;gap:10px}
+.card .big small{font-family:var(--body);font-size:13px;font-weight:500;color:var(--muted);max-width:14ch;line-height:1.2}
+.card .view{width:100%;margin-top:14px;border:1px solid var(--line);background:var(--panel2);color:var(--ink);font-weight:700;font-size:15px;padding:14px;border-radius:999px;cursor:pointer}
+footer{max-width:1180px;margin:0 auto;padding:10px 20px 40px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<nav class="nav" aria-label="Main">
+  <a class="logo" href="#play">Blind Rank</a>
+  <div class="links">
+    <a href="#play" aria-current="page">Play</a>
+    <a class="opt" href="#how">How it works</a>
+    <a class="opt" href="#scoring">Scoring</a>
+    <span class="links soon" style="gap:0"><span style="font-weight:600;font-size:15px">Leaderboard</span><span class="later">Later</span></span>
+  </div>
+</nav>
+
+<main>
+  <section class="hero" id="play">
+    <div id="left"></div>
+    <div id="pitch"></div>
+  </section>
+
+  <section class="sec" id="recent">
+    <div><h2>Your recent rounds</h2><p>Your scores stay in this browser. Come back tomorrow for a new daily round.</p></div>
+    <div class="cards" id="hist"></div>
+  </section>
+
+  <section class="sec" id="how">
+    <div><h2>How it works</h2></div>
+    <p>Each round deals ten Premier League players, one at a time. Place each one in a slot from 1 (highest potential) to 10 before you see the next. A placed player is locked. When all ten are down, the true order is revealed.</p>
+  </section>
+
+  <section class="sec" id="scoring">
+    <div><h2>Scoring</h2></div>
+    <p>Every slot you are away from a player's true position costs 2 points, so a perfect order scores 100. Exact hits show green, one slot out shows yellow, and anything further shows red.</p>
+  </section>
+</main>
+<footer>Prototype. Ratings are placeholder values, and shirts stand in for player photos until licensed imagery is sorted.</footer>
+
+<script>
+const P=[
+["Erling Haaland","HAALAND","Man City","#6CABDD",96],["Bukayo Saka","SAKA","Arsenal","#EF0107",94],
+["Cole Palmer","PALMER","Chelsea","#034694",93],["Phil Foden","FODEN","Man City","#6CABDD",92],
+["Mohamed Salah","SALAH","Liverpool","#C8102E",91],["William Saliba","SALIBA","Arsenal","#EF0107",90],
+["Alexander Isak","ISAK","Liverpool","#C8102E",89],["Declan Rice","RICE","Arsenal","#EF0107",88],
+["Martin Ødegaard","ØDEGAARD","Arsenal","#EF0107",87],["Rayan Cherki","CHERKI","Man City","#6CABDD",86],
+["Xavi Simons","SIMONS","Spurs","#132257",85],["Morgan Rogers","ROGERS","Aston Villa","#670E36",84],
+["Dominik Szoboszlai","SZOBOSZLAI","Liverpool","#C8102E",83],["Joško Gvardiol","GVARDIOL","Man City","#6CABDD",82],
+["Bruno Fernandes","B. FERNANDES","Man Utd","#DA291C",81],["Bruno Guimarães","GUIMARÃES","Newcastle","#2b2b2b",80],
+["Jérémy Doku","DOKU","Man City","#6CABDD",79],["Eberechi Eze","EZE","Arsenal","#EF0107",78],
+["Enzo Fernández","E. FERNÁNDEZ","Chelsea","#034694",77],["Kai Havertz","HAVERTZ","Arsenal","#EF0107",76],
+["Virgil van Dijk","VAN DIJK","Liverpool","#C8102E",75],["Matheus Cunha","CUNHA","Man Utd","#DA291C",74],
+["Bryan Mbeumo","MBEUMO","Man Utd","#DA291C",73],["Pedro Neto","NETO","Chelsea","#034694",72],
+["Anthony Gordon","GORDON","Newcastle","#2b2b2b",71],["Tijjani Reijnders","REIJNDERS","Man City","#6CABDD",70],
+["Jarrod Bowen","BOWEN","West Ham","#7A263A",69],["Ollie Watkins","WATKINS","Aston Villa","#670E36",68],
+["Pedro Porro","PORRO","Spurs","#132257",67],["João Pedro","J. PEDRO","Chelsea","#034694",66]
+].map(a=>({name:a[0],surname:a[1],club:a[2],kit:a[3],r:a[4]}));
+
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const pad=n=>String(n).padStart(2,"0");
+const key=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const NOW=new Date(), TODAY=key(NOW);
+const DATE_LABEL=NOW.toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"}).replace(",","");
+function lum(hex){const n=parseInt(hex.slice(1),16);return(0.299*(n>>16)+0.587*((n>>8)&255)+0.114*(n&255))/255}
+function safeGet(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}}
+function safeSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+
+const SHIRT="M40 8 L20 18 L4 44 L22 54 L32 44 L32 112 L88 112 L88 44 L98 54 L116 44 L100 18 L80 8 Q60 26 40 8Z";
+function shirt(fill,label,empty){
+  const ink=empty?"#eaf3ec":(lum(fill)>.6?"#10190f":"#ffffff");
+  return `<svg viewBox="0 0 120 120" width="58" height="58" aria-hidden="true"><path d="${SHIRT}" fill="${empty?"rgba(255,255,255,.12)":fill}" stroke="${empty?"rgba(255,255,255,.7)":"#fff"}" stroke-width="${empty?3:4}" stroke-linejoin="round" ${empty?'stroke-dasharray="7 6"':""}/><text x="60" y="82" text-anchor="middle" font-family="Big Shoulders Display,Arial Narrow,sans-serif" font-weight="900" font-size="46" fill="${ink}">${label}</text></svg>`;
+}
+
+let mode="daily",view="intro",deck=[],slots=Array(10).fill(null),idx=0,score=0,seed=0,lastPlaced=false;
+
+function makeDeck(s){const r=rng(s),a=[...P];for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a.slice(0,10)}
+const rankIn=p=>[...deck].sort((a,b)=>b.r-a.r).indexOf(p)+1;
+
+function start(m){
+  mode=m; seed=m==="daily"?parseInt(TODAY.replace(/-/g,"")):(Date.now()&0x7fffffff);
+  deck=makeDeck(seed);slots=Array(10).fill(null);idx=0;score=0;view="play";lastPlaced=false;render();
+}
+function place(i){
+  if(view!=="play"||slots[i]!==null)return;
+  slots[i]=deck[idx];idx++;lastPlaced=true;
+  if(idx===10)finish();
+  render();
+}
+function finish(){
+  const sum=slots.reduce((s,p,i)=>s+Math.abs((i+1)-rankIn(p)),0);
+  score=Math.max(0,100-sum*2);view="done";
+  if(score>(safeGet("br_best")||0))safeSet("br_best",score);
+  if(mode==="daily"){
+    const st=safeGet("br_streak")||{last:null,n:0};
+    if(st.last!==TODAY){const y=new Date();y.setDate(y.getDate()-1);st.n=(st.last===key(y))?st.n+1:1;st.last=TODAY;safeSet("br_streak",st)}
+  }
+  const h=safeGet("br_hist")||[];
+  h.unshift({mode,seed,date:DATE_LABEL,score,ids:slots.map(p=>P.indexOf(p))});
+  safeSet("br_hist",h.slice(0,6));
+}
+function loadRound(h){
+  mode=h.mode;seed=h.seed;deck=makeDeck(seed);slots=h.ids.map(i=>P[i]);idx=10;score=h.score;view="done";lastPlaced=false;
+  render();document.getElementById("play").scrollIntoView();
+}
+function verdict(s){
+  if(s===100)return "Perfect. Nobody does that.";
+  if(s>=80)return "Scout-level eye.";
+  if(s>=60)return "Solid. A few of them fooled you.";
+  if(s>=40)return "Pundit territory: confident and wrong.";
+  return "Bold. Wildly bold.";
+}
+function shareText(){
+  const g=slots.map((p,i)=>{const d=Math.abs((i+1)-rankIn(p));return d===0?"🟩":d<=1?"🟨":"🟥"}).join("");
+  return `Blind Rank: Premier League\n${mode==="daily"?"Daily "+TODAY:"Random round"}: ${score}/100\n${g}\n${location.href}`;
+}
+
+function segHTML(){return `<div class="seg" role="group" aria-label="Game mode"><button data-m="daily" aria-pressed="${mode==="daily"}">Daily</button><button data-m="random" aria-pressed="${mode==="random"}">Random</button></div>`}
+
+function renderLeft(){
+  const el=document.getElementById("left");let h=segHTML();
+  if(view==="intro"){
+    h+=`<h1>Ten players.<br>Rank them blind.<span class="g">No take-backs.</span></h1>
+    <p class="lead">Ten Premier League players are dealt one at a time. Drop each into a slot from 1 to 10 by potential, then see how close you were.</p>
+    <button class="cta-btn" id="go">${mode==="daily"?"Start today’s rank":"Start a random round"}</button>
+    <p class="fine">${mode==="daily"?"The same ten players for everyone today.":"A fresh set of ten every time."} Each slot locks as soon as you place a player.</p>`;
+  }else if(view==="play"){
+    h+=`<h1>Where does<br>he rank?<span class="g">${idx+1} of 10.</span></h1>
+    <p class="lead">Tap a shirt on the pitch to place the player on the card. Slot 1 is the highest potential.</p>
+    <p class="fine">On a keyboard, press 1 to 0. Slots lock once placed.</p>`;
+  }else{
+    const best=safeGet("br_best")||0,st=safeGet("br_streak");
+    h+=`<h1>Final whistle.<span class="g">${score} / 100</span></h1>
+    <p class="lead">${verdict(score)}</p>
+    <div class="btnrow"><button class="cta-btn" id="share">Copy result to share</button><button class="ghost-btn" id="again">Play a random round</button></div>
+    <p class="fine">Best score ${best}.${st?` Daily streak ${st.n}.`:""}</p>
+    <div class="slotcta"><b>Related content slot</b><p>Placeholder for a fantasy tips or matchday article, matched to the clubs in this round.</p><button class="ghost-btn" type="button">Read the preview</button></div>`;
+  }
+  el.innerHTML=h;
+  el.querySelectorAll(".seg button").forEach(b=>b.onclick=()=>{mode=b.dataset.m;view="intro";render()});
+  const go=document.getElementById("go");if(go)go.onclick=()=>start(mode);
+  const ag=document.getElementById("again");if(ag)ag.onclick=()=>start("random");
+  const sh=document.getElementById("share");if(sh)sh.onclick=async e=>{
+    try{await navigator.clipboard.writeText(shareText());e.target.textContent="Copied"}catch(err){e.target.textContent="Copy failed"}
+  };
+}
+
+const ROWS=[[0,1,2],[3,4,5],[6,7,8,9]];
+function renderPitch(){
+  let rows="";
+  ROWS.forEach(r=>{
+    rows+=`<div class="row">`+r.map(i=>{
+      const n=i+1,p=slots[i];
+      if(!p){return `<button class="shirt" data-i="${i}" ${view==="play"?"":"disabled"} aria-label="Slot ${n}">${shirt("",n,true)}<span class="lab"></span></button>`}
+      if(view==="done"){
+        const t=rankIn(p),d=Math.abs(n-t),c=d===0?"good":d===1?"near":"bad";
+        return `<button class="shirt flip" style="animation-delay:${i*90}ms" disabled aria-label="Slot ${n}: ${p.name}, actual rank ${t}">${shirt(p.kit,p.r,false)}<span class="lab">${p.surname}<em class="${c}">Actual ${t}</em></span></button>`;
+      }
+      return `<button class="shirt" disabled aria-label="Slot ${n}: ${p.name}">${shirt(p.kit,n,false)}<span class="lab">${p.surname}</span></button>`;
+    }).join("")+`</div>`;
+  });
+  let win;
+  if(view==="play"){const p=deck[idx];win=`<span class="dot" style="background:${p.kit}"></span><span class="nm ${lastPlaced?"rise":""}">${p.name}</span>`}
+  else if(view==="done"){win=`<span class="nm">Round complete</span>`}
+  else{win=`<span class="nm">10 players</span>`}
+  document.getElementById("pitch").innerHTML=`<div class="pitch"><div class="grass">${rows}</div>
+    <div class="tick"><div class="d">${DATE_LABEL}</div><div class="win">${win}</div></div></div>`;
+  document.querySelectorAll("#pitch .shirt:not(:disabled)").forEach(b=>b.onclick=()=>place(+b.dataset.i));
+}
+
+function renderHist(){
+  const h=safeGet("br_hist")||[],el=document.getElementById("hist");
+  if(!h.length){el.innerHTML=`<div class="card"><div class="t">No rounds yet</div><p class="s">Play a round and it will show up here.</p></div>`;return}
+  el.innerHTML=h.map((r,i)=>{
+    const d=makeDeck(r.seed),exact=r.ids.filter((id,k)=>{const p=P[id];return [...d].sort((a,b)=>b.r-a.r).indexOf(p)+1===k+1}).length;
+    return `<div class="card"><div class="top"><span class="t">${r.mode==="daily"?"Daily rank":"Random rank"}</span><span class="pill">${r.mode==="daily"?"Daily":"Random"}</span></div>
+    <p class="s">Played ${r.date}.</p><div class="big">${r.score}<small>of 100, ${exact} exact</small></div>
+    <button class="view" data-h="${i}">View rank</button></div>`;
+  }).join("");
+  el.querySelectorAll(".view").forEach(b=>b.onclick=()=>loadRound(h[+b.dataset.h]));
+}
+
+function render(){renderLeft();renderPitch();renderHist()}
+document.addEventListener("keydown",e=>{
+  if(view!=="play"||e.metaKey||e.ctrlKey||e.altKey)return;
+  if(/^[0-9]$/.test(e.key))place(e.key==="0"?9:(+e.key)-1);
+});
+render();
+</script>
+</body>
+</html>
